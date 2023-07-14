@@ -35,17 +35,15 @@ export default function Translator() {
       });
   };
 
-  console.log(countries);
-
   return (
     <>
-      <div className="container mt-11 mx-auto text-center px-4 py-8">
+      <div className="container mt-16 mx-auto text-center px-4 py-8">
         <h1 className="text-2xl text-blue-900 font-bold mb-4">Translator</h1>
         <div className="wrapper">
-          <div className="text-input grid grid-cols-2 gap-4">
-            <div>
+          <div className="text-input grid grid-cols-1 md:grid-cols-2">
+            <div className="ml-0 md:ml-36 md:mr-0">
               <select
-                className="select-dropdown row from w-96 border-2 border-black h-10 mb-2 ml-12 rounded-md"
+                className="select-dropdown row from w-full md:w-56 border-2 border-blue-900 h-10 mb-2 ml-0 md:ml-[190px] rounded-md"
                 value={translateFrom}
                 onChange={(event) => setTranslateFrom(event.target.value)}
               >
@@ -56,15 +54,15 @@ export default function Translator() {
                 ))}
               </select>
               <textarea
-                className="from-text w-full p-2 border-2 border-black h-40 mb-2"
+                className="from-text w-full md:w-[450px] p-2 border-2 border-blue-900 h-40 mb-2"
                 placeholder="Enter text to translate"
                 value={fromText}
                 onChange={handleInputChange}
               ></textarea>
             </div>
-            <div>
+            <div className="mt-8 md:mt-0 ml-0 md:mr-36">
               <select
-                className="select-dropdown row to w-96 border-2 border-black h-10 mb-2 ml-12 rounded-md"
+                className="select-dropdown row to w-full md:w-56 border-2 border-blue-900 h-10 mb-2 ml-0 md:ml-[210px] rounded-md"
                 value={translateTo}
                 onChange={(event) => setTranslateTo(event.target.value)}
               >
@@ -75,7 +73,7 @@ export default function Translator() {
                 ))}
               </select>
               <textarea
-                className="to-text w-full p-2 border-2 border-black h-40 mb-2"
+                className="to-text w-full md:w-[450px] p-2 border-2 border-blue-900 h-40 mb-2"
                 placeholder="Translation"
                 value={toText}
                 readOnly
@@ -84,7 +82,7 @@ export default function Translator() {
           </div>
 
           <button
-            className="px-4 py-2 bg-blue-400 text-white w-48 rounded-md hover:bg-gray-500"
+            className="px-4 py-2 bg-blue-900 text-white w-48 rounded-md hover:bg-gray-500"
             onClick={handleTranslate}
           >
             Translate

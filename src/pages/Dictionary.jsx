@@ -1,4 +1,3 @@
-// import React from "react";
 import { useState } from "react";
 
 export default function Dictionary() {
@@ -48,8 +47,8 @@ export default function Dictionary() {
   };
 
   return (
-    <div className="bg-white min-h-screen flex justify-center items-center">
-      <div className="container bg-blue-500 bg-opacity-30 p-6 rounded-2xl shadow-md w-90% max-w-md m-10 flex flex-col items-center justify-center font-cursive text-lg font-semibold">
+    <div className="bg-white  flex justify-center  items-center">
+      <div className="container bg-blue-500 bg-opacity-30 p-6 rounded-2xl shadow-md w-[600px] mt-56  m-10 flex flex-col items-center justify-center font-cursive text-lg font-semibold">
         <h1 className="text-2xl mb-4">English Dictionary</h1>
         <input
           type="text"
