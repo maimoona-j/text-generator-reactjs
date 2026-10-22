@@ -1,4 +1,3 @@
- 
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
@@ -13,22 +12,22 @@ export default function Translator() {
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
 
-  // Your countries object uses language codes as keys
-  // and language names as values.
+  // Build the language dropdown from countries.jsx.
+  const languageNameOverrides = {
+    "ur-PK": "Urdu",
+    "pa-IN": "Punjabi",
+    "bn-IN": "Bengali",
+    "fa-IR": "Persian",
+    "dv-MV": "Dhivehi",
+    "bjs-BB": "Bajan Creole",
+    "en-GB": "English",
+  };
+
   const languages = Object.entries(countries)
-    .map(([code, originalName]) => {
-      let name = originalName;
-
-      if (code === "ur-PK") name = "Urdu";
-      if (code === "pa-IN") name = "Punjabi";
-      if (code === "bn-IN") name = "Bengali";
-      if (code === "fa-IR") name = "Persian";
-      if (code === "dv-MV") name = "Dhivehi";
-      if (code === "bjs-BB") name = "Bajan Creole";
-      if (code === "en-GB") name = "English";
-
-      return { code, name };
-    })
+    .map(([code, originalName]) => ({
+      code,
+      name: languageNameOverrides[code] || originalName,
+    }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const handleTranslate = async () => {
@@ -91,8 +90,11 @@ export default function Translator() {
     }
   };
 
+  // Swap languages and the completed translation.
   const handleSwap = () => {
-    if (!translateFrom || !translateTo) return;
+    if (!translateFrom || !translateTo || !toText.trim() || loading) {
+      return;
+    }
 
     setTranslateFrom(translateTo);
     setTranslateTo(translateFrom);
@@ -158,13 +160,31 @@ export default function Translator() {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={handleClear}
-              className="self-start rounded-lg px-3 py-2 text-sm font-medium text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 sm:self-auto"
-            >
-              Clear all
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={handleSwap}
+                disabled={
+                  !translateFrom ||
+                  !translateTo ||
+                  !toText.trim() ||
+                  loading
+                }
+                className="rounded-lg border border-teal-100 px-3 py-2 text-sm font-medium text-teal-800 transition hover:bg-teal-50 disabled:cursor-not-allowed disabled:opacity-40"
+                title="Swap languages and translated text"
+              >
+                ⇄ Swap languages
+              </button>
+
+              <button
+                type="button"
+                onClick={handleClear}
+                disabled={loading}
+                className="rounded-lg px-3 py-2 text-sm font-medium text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50"
+              >
+                Clear all
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -184,6 +204,7 @@ export default function Translator() {
                   setTranslateFrom(event.target.value);
                   setToText("");
                   setError("");
+                  setCopied(false);
                 }}
                 className="mb-5 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm text-slate-800 outline-none transition focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10"
               >
@@ -202,6 +223,7 @@ export default function Translator() {
                 >
                   Your text
                 </label>
+
                 <span className="text-xs tabular-nums text-slate-400">
                   {fromText.length}/5000
                 </span>
@@ -244,6 +266,7 @@ export default function Translator() {
                   setTranslateTo(event.target.value);
                   setToText("");
                   setError("");
+                  setCopied(false);
                 }}
                 className="mb-5 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm text-slate-800 outline-none transition focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10"
               >
@@ -300,7 +323,7 @@ export default function Translator() {
             </div>
           )}
 
-          {/* Actions */}
+          {/* Translate action */}
           <div className="flex flex-col items-center gap-3 border-t border-slate-100 bg-[#FCFDFD] px-5 py-5 sm:px-7">
             <button
               type="button"
@@ -352,14 +375,18 @@ export default function Translator() {
             className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-teal-200 hover:shadow-sm"
           >
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
-              <span className="text-xl" aria-hidden="true">✎</span>
+              <span className="text-xl" aria-hidden="true">
+                ✎
+              </span>
             </div>
+
             <div>
               <h3 className="font-semibold text-slate-900">Text Editor</h3>
               <p className="mt-1 text-sm text-slate-500">
                 Format and clean your text.
               </p>
             </div>
+
             <span className="ml-auto text-slate-400 transition group-hover:translate-x-1 group-hover:text-teal-700">
               →
             </span>
@@ -370,14 +397,18 @@ export default function Translator() {
             className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-teal-200 hover:shadow-sm"
           >
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
-              <span className="text-xl" aria-hidden="true">▤</span>
+              <span className="text-xl" aria-hidden="true">
+                ▤
+              </span>
             </div>
+
             <div>
               <h3 className="font-semibold text-slate-900">Dictionary</h3>
               <p className="mt-1 text-sm text-slate-500">
                 Find meanings and definitions.
               </p>
             </div>
+
             <span className="ml-auto text-slate-400 transition group-hover:translate-x-1 group-hover:text-teal-700">
               →
             </span>
